@@ -36,7 +36,7 @@ TestLabel=[]
 #     print(imag.shape)
 #     col_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 #     # col_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-#     image = cv2.resize(col_img, (480, 150))
+#     image = cv2.resize(col_img, (100, 31))
 #
 #     cv2.imwrite(file, image)
 #     # print(image.shape)
@@ -60,12 +60,12 @@ for i in range(1,11):
 print(len(TrainLabel))
 print(len(TestLabel))
 
-img_rows, img_cols = 150,480
+img_rows, img_cols = 31,100
 
 nb_classes = 10
 num_classes = 10
 batch_size = 32
-epochs = 10
+epochs = 50
 
 
 x_train = np.array([np.array(Image.open(fname)) for fname in TrainImg])
@@ -145,7 +145,7 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
-model.fit(x_train, y_train,
+history = model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
           verbose=1,
@@ -154,3 +154,21 @@ score = model.evaluate(x_test, y_test, verbose=0)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
+
+import matplotlib.pyplot as plt
+
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
