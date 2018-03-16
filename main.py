@@ -24,22 +24,22 @@ TrainLabel=[]
 TestImg=[]
 TestLabel=[]
 
-# Images = []
-# for i in range(1,11):
-#     C=0
-#     for filename in listdir("medicine/"+str(i)+"/"):
-#         if(filename.endswith(".bmp")):
-#             Images.append("medicine/"+str(i)+"/"+filename)
-# for file in Images:
-#     img = cv2.imread(file)
-#     imag = np.asarray(img)
-#     print(imag.shape)
-#     col_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-#     # col_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-#     image = cv2.resize(col_img, (100, 31))
-#
-#     cv2.imwrite(file, image)
-#     # print(image.shape)
+Images = []
+for i in range(1,11):
+    C=0
+    for filename in listdir("medicine/"+str(i)+"/"):
+        if(filename.endswith(".bmp")):
+            Images.append("medicine/"+str(i)+"/"+filename)
+for file in Images:
+    img = cv2.imread(file)
+    imag = np.asarray(img)
+    print(imag.shape)
+    col_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    # col_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    image = cv2.resize(col_img, (100, 31))
+
+    cv2.imwrite(file, image)
+    # print(image.shape)
 #
 
 for i in range(1,11):
