@@ -24,13 +24,15 @@ TrainLabel=[]
 TestImg=[]
 TestLabel=[]
 
+
+# Convert Images to Convert them into same shape 
 Images = []
 for i in range(1,11):
     C=0
     for filename in listdir("medicine/"+str(i)+"/"):
         if(filename.endswith(".bmp")):
-            Images.append("medicine/"+str(i)+"/"+filename)
-for file in Images:
+            Images.append("medicine/"+str(i)+"/"+filename) # Storing the path of all the datasets
+for file in Images: # Reading the images one by one 
     img = cv2.imread(file)
     imag = np.asarray(img)
     print(imag.shape)
@@ -39,10 +41,9 @@ for file in Images:
     image = cv2.resize(col_img, (100, 31))
 
     cv2.imwrite(file, image)
-    # print(image.shape)
 #
 
-for i in range(1,11):
+for i in range(1,11): # Storing the image paths differently in train and test category 
     C=0
     for filename in listdir("medicine/"+str(i)+"/"):
         if C<180:
@@ -67,7 +68,7 @@ num_classes = 10
 batch_size = 32
 epochs = 100
 
-
+# MOdel Training
 x_train = np.array([np.array(Image.open(fname)) for fname in TrainImg])
 x_test = np.array([np.array(Image.open(fname)) for fname in TestImg])
 
@@ -89,21 +90,6 @@ x_train /= 255
 x_test /= 255
 
 
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
-
-print(y_train.shape[0], 'train samples')
-print(y_test.shape[0], 'test samples')
-
-
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
-
-print(y_train.shape[0], 'train samples')
-print(y_test.shape[0], 'test samples')
-
 model = Sequential()
 model.add(Conv2D(32, kernel_size=(3, 3),
                  activation='relu',
@@ -120,32 +106,32 @@ model.add(Dense(num_classes, activation='softmax'))
 model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
-# checkpointer = ModelCheckpoint(filepath='weight/weights.hdf5', verbose=1, save_best_only=True)
-#
-# history = model.fit(x_train, y_train,
-#           batch_size=batch_size,
-#           epochs=epochs,
-#           verbose=1,
-#           validation_data=(x_test, y_test),callbacks=[checkpointer])
+checkpointer = ModelCheckpoint(filepath='weight/weights.hdf5', verbose=1, save_best_only=True)
+
+history = model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          verbose=1,
+          validation_data=(x_test, y_test),callbacks=[checkpointer])
 score = model.evaluate(x_test, y_test, verbose=0)
 
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 #
-# import matplotlib.pyplot as plt
-#
-# plt.plot(history.history['acc'])
-# plt.plot(history.history['val_acc'])
-# plt.title('model accuracy')
-# plt.ylabel('accuracy')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
-# # summarize history for loss
-# plt.plot(history.history['loss'])
-# plt.plot(history.history['val_loss'])
-# plt.title('model loss')
-# plt.ylabel('loss')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
+import matplotlib.pyplot as plt
+
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
